@@ -10,54 +10,11 @@ heart_disease_model = pickle.load(open('saved models/heart_disease_model.sav', '
 # st.header('Disease Prediction System')
 
 # page title
-st.title('Diabetes Prediction using ML')
+st.title('Health Prediction using ML')
     
 # getting the input data from the user
 col1, col2, col3 = st.columns(3)
-    
-with col1:
-    Pregnancies = st.text_input('Number of Pregnancies')
-        
-with col2:
-    Glucose = st.text_input('Glucose Level')
-    
-with col3:
-    BloodPressure = st.text_input('Blood Pressure value')
-    
-with col1:
-    SkinThickness = st.text_input('Skin Thickness value')
-    
-with col2:
-    Insulin = st.text_input('Insulin Level')
-    
-with col3:
-    BMI = st.text_input('BMI value')
-    
-with col1:
-    DiabetesPedigreeFunction = st.text_input('Diabetes Pedigree Function value')
-    
-with col2:
-    Age = st.text_input('Age of the Person')
-    
-# code for Prediction
-diab_diagnosis = ''
-    
-# creating a button for Prediction
-if st.button('Diabetes Test Result'):
-    diab_prediction = diabetes_model.predict([[Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin, BMI, DiabetesPedigreeFunction, Age]])
-        
-    if diab_prediction[0] == 1:
-        diab_diagnosis = 'The person is diabetic'
-    else:
-        diab_diagnosis = 'The person is not diabetic'
-        
-st.success(diab_diagnosis)
 
-# page title
-st.title('Heart Disease Prediction using ML')
-    
-col1, col2, col3 = st.columns(3)
-    
 with col1:
     age = st.text_input('Age')
         
@@ -76,6 +33,37 @@ with col2:
 with col3:
     fbs = st.text_input('Fasting Blood Sugar > 120 mg/dl')
         
+
+    
+with col1:
+    Pregnancies = st.text_input('Number of Pregnancies')
+        
+with col2:
+    Glucose = st.text_input('Glucose Level')
+    
+# with col3:
+#     BloodPressure = st.text_input('Blood Pressure value')
+    
+with col1:
+    SkinThickness = st.text_input('Skin Thickness value')
+    
+with col2:
+    Insulin = st.text_input('Insulin Level')
+    
+with col3:
+    BMI = st.text_input('BMI value')
+    
+with col3:
+    DiabetesPedigreeFunction = st.text_input('Diabetes Pedigree Function value')
+    
+# with col2:
+#     Age = st.text_input('Age of the Person')
+    
+
+
+# page title
+# st.title('Basic data')
+
 with col1:
     restecg = st.text_input('Resting Electrocardiographic results')
         
@@ -94,51 +82,77 @@ with col2:
 with col3:
     ca = st.text_input('Major vessels colored by flourosopy')
         
-with col1:
+with col2:
     thal = st.text_input('thal: 0 = normal; 1 = fixed defect; 2 = reversable defect')
-     
+    
 # code for Prediction
+# code for Prediction
+diab_diagnosis = ''
 heart_diagnosis = ''
 prediction_probability = 0.0
 
 # Convert input values to numeric
-age = float(age)
-sex = float(sex)
-cp = float(cp)
-trestbps = float(trestbps)
-chol = float(chol)
-fbs = float(fbs)
-restecg = float(restecg)
-thalach = float(thalach)
-exang = float(exang)
-oldpeak = float(oldpeak)
-slope = float(slope)
-ca = float(ca)
-thal = float(thal)
+age = 0.0
+sex = 0.0
+cp = 0.0
+trestbps = 0.0
+chol = 0.0
+fbs = 0.0
+restecg = 0.0
+thalach = 0.0
+exang = 0.0
+oldpeak = 0.0
+slope = 0.0
+ca = 0.0
+thal = 0.0
 
     # Reshape the input data to a 2D array
 input_data = [[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]]
 
-    # creating a button for Prediction
-if st.button('Heart Disease Test Result'):
-    heart_prediction = heart_disease_model.predict(input_data)[0]
-
-    # Get the prediction probability
-    prediction_probability = heart_disease_model.predict_proba(input_data)[0][1]
-
-    if heart_prediction == 1:
-        heart_diagnosis = 'The person is having heart disease'
-    else:
-        heart_diagnosis = 'The person does not have any heart disease'
-
-st.success(f'Heart Health Score: {prediction_probability:.2f}')
-st.success(heart_diagnosis)
 
 
 #intialize ecg object
 ecg = ECG()
 #get the uploaded image
 uploaded_file = st.file_uploader("Choose a file")
+
+
+    # creating a button for Prediction
+if st.button('Predict Health Result'):
+    heart_prediction = heart_disease_model.predict(input_data)[0]
+    diab_prediction = diabetes_model.predict([[Pregnancies, Glucose, trestbps, SkinThickness, Insulin, BMI, DiabetesPedigreeFunction, age]])
+
+    # Get the prediction probability
+    prediction_probability = heart_disease_model.predict_proba(input_data)[0][1]
+
+    # if heart_prediction == 1:
+    #     heart_diagnosis = 'The person is having heart disease'
+    # else:
+    #     heart_diagnosis = 'The person does not have any heart disease'
+    
+    if prediction_probability <= 0.2:
+        heart_diagnosis = 'Heart is in Good Condition'
+    elif 0.2 < prediction_probability <= 0.4:
+        heart_diagnosis = 'Stage 1 Heart Disease (work on your health)'
+    elif 0.4 < prediction_probability <= 0.6:
+        heart_diagnosis = 'Stage 2 Heart Disease (Precautionary Measures Required)'
+    elif 0.6 < prediction_probability <= 0.8:
+        heart_diagnosis = 'Stage 3 Heart Disease (Consult a doctor)'
+    else:
+        heart_diagnosis = 'Stage 4 Heart Disease (Critical Condition)'
+
+    
+        
+    if diab_prediction[0] == 1:
+        diab_diagnosis = 'The person is diabetic'
+    else:
+        diab_diagnosis = 'The person is not diabetic'
+
+
+st.success(f'Heart Health Score: {prediction_probability:.2f}')
+st.success(heart_diagnosis)
+st.success(diab_diagnosis)
+
 
 if uploaded_file is not None:
   """#### **UPLOADED IMAGE**"""
@@ -197,9 +211,9 @@ if uploaded_file is not None:
   with my_expander4:
     st.write(ecg_final)
   
-  """#### **PASS TO PRETRAINED ML MODEL FOR PREDICTION**"""
-  #call the Pretrainsed ML model for prediction
-  ecg_model=ecg.ModelLoad_predict(ecg_final)
-  my_expander5 = st.expander(label='PREDICTION')
-  with my_expander5:
-    st.write(ecg_model)
+#   """#### **PASS TO PRETRAINED ML MODEL FOR PREDICTION**"""
+# #   call the Pretrainsed ML model for prediction
+#   ecg_model=ecg.ModelLoad_predict(ecg_final)
+#   my_expander5 = st.expander(label='PREDICTION')
+#   with my_expander5:
+#     st.write(ecg_model)
