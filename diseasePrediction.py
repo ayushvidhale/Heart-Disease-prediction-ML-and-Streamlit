@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun May 22 11:53:51 2022
-@author: siddhardhan
-"""
-
 import pickle
 import streamlit as st
 from streamlit_option_menu import option_menu
@@ -118,10 +112,6 @@ if selected == 'Heart Disease Prediction':
     prediction_probability = 0.0
 
     # Convert input values to numeric
-    # if age:
-    #     age = float(age)
-    # else:
-    #     st.warning('Please enter a valid age.')
     age = float(age)
     sex = float(sex)
     cp = float(cp)
