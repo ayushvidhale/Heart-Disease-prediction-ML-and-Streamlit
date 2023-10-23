@@ -4,16 +4,9 @@ import numpy as np
 import pickle
 
 st.write("""
-# Heart disease Prediction App
-
-This app predicts If a patient has a heart disease
-
-Data obtained from Kaggle: https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset.
-""")
+# Heart disease Prediction App""")
 
 st.sidebar.header('User Input Features')
-
-
 
 # Collects user input features into dataframe
 
